@@ -1,0 +1,84 @@
+﻿@model OrganizadorPOs.ViewModels.RegistroViewModel;
+
+<form method="post">
+
+    <div class="row">
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputEmail1">PROJETO</label>
+            <input asp-for="Projeto" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nome do projeto">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">Tipo</label>
+            <input asp-for="Tipo" type="text" class="form-control" id="exampleInputPassword1" placeholder="Tipo" list="tipos" autocomplete="off">
+            <datalist id="tipos">
+                @if (ViewBag.Tipos != null && ((IEnumerable<string>)ViewBag.Tipos).Any())
+                    foreach (string tipo in ViewBag.Tipos)
+                    {
+                        <option value="@tipo"></option>
+                    }
+            </datalist>
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">WWC</label>
+            <input asp-for="WWC" type="text" class="form-control" id="exampleInputPassword1" placeholder="Tipo">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">HORAS</label>
+            <input asp-for="HORAS" type="text" class="form-control" id="exampleInputPassword1" placeholder="Tipo">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">PO</label>
+            <input asp-for="PO" type="text" class="form-control" id="exampleInputPassword1" placeholder="Número da PO">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="statusId">STATUS</label>
+            <select asp-for="Status" class="form-select" id="statusId" aria-label="Default select example">
+                <option selected value=true>Recebido</option>
+                <option value=false>Pendente</option>
+            </select>
+        </div>
+
+        <div class="form-group col-12 my-2">
+            <label for="exampleInputPassword1">VALOR PO (R$)</label>
+            <input asp-for="ValorPO" type="text" class="form-control" id="exampleInputPassword1" placeholder="Tipo">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">FEITO EM</label>
+            <input asp-for="FeitoEm" type="date" class="form-control" id="exampleInputPassword1" placeholder="Tipo">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="exampleInputPassword1">RECEBIDA EM</label>
+            <input asp-for="RecebidaEm" type="date" class="form-control" id="exampleInputPassword1" placeholder="Tipo">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="nfId">NOTA FISCAL</label>
+            <select asp-for="EmitiuNotaFiscal" class="form-select" id="nfId" aria-label="Default select example">
+                <option selected value=true>Emitida</option>
+                <option value=false>Pendente</option>
+            </select>
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="pagamentoRecebidoId">PAGAMENTO</label>
+            <select asp-for="PagamentoRecebido" class="form-select" id="pagamentoRecebidoId" aria-label="Default select example">
+                <option selected value=true>Pago</option>
+                <option value=false>Pendente</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary my-3">Salvar</button>
+
+    <input type="hidden" asp-for="Id" />
+
+</form>

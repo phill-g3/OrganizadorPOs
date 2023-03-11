@@ -1,0 +1,141 @@
+﻿@model OrganizadorPOs.ViewModels.HomeViewModel;
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form method="get" action="Home">
+    <div class="row">
+
+        <div class="form-group col-6 my-2">
+            <label for="ProjetoId"><b>Projeto</b></label>
+            <input name="projeto" type="text" class="form-control" id="ProjetoId" placeholder="Projeto" value="@Model?.Filtro?.Projeto">
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="tipoId"><b>Tipo</b></label>
+            <input name="tipo" class="form-control" id="tipoId" list="tipos" autocomplete="off">
+            <datalist id="tipos">
+                @if(ViewBag.Tipos != null && ((IEnumerable<string>)ViewBag.Tipos).Any())
+                    foreach(string tipo in ViewBag.Tipos)
+                    {
+                        <option value="@tipo"></option>
+                    }
+            </datalist>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-6 my-2">
+            <label for="FeitoId"><b>Feito Em</b> </label>
+            <div id="FeitoId" class="row">
+                <div class="col-6">
+                    <label for="feitoEmMin">De</label>
+                    <input name="feitoEmMin" type="date" class="form-control" id="feitoEmMin" value=@Model?.Filtro?.FeitoEmMin?.ToString("yyyy-MM-dd")>
+                </div>
+                <div class="col-6">
+                    <label for="feitoEmMax">Até</label>
+                    <input name="feitoEmMax" type="date" class="form-control" id="feitoEmMax" value=@Model?.Filtro?.FeitoEmMax?.ToString("yyyy-MM-dd")>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-6 my-2">
+            <label for="RecebidaId"><b>Recebida Em</b></label>
+            <div id="RecebidaId" class="row">
+                <div class="col-6">
+                    <label for="recebidaEmMin">De</label>
+                    <input name="recebidaEmMin" type="date" class="form-control" id="recebidaEmMin" value=@Model?.Filtro?.RecebidaEmMin?.ToString("yyyy-MM-dd")>
+                </div>
+                <div class="col-6">
+                    <label for="recebidaEmMax">Até</label>
+                    <input name="recebidaEmMax" type="date" class="form-control" id="recebidaEmMax" value=@Model?.Filtro?.RecebidaEmMax?.ToString("yyyy-MM-dd")>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-3 my-2">
+            <label for="nfId"><b>Status</b></label>
+            <select name="status" class="form-select" id="nfId" aria-label="Default select example" asp-items="ViewBag.StatusOptions">
+            </select>
+        </div>
+
+        <div class="form-group col-3 my-2">
+            <label for="nfId"><b>Nota Fiscal</b></label>
+            <select name="nf" class="form-select" id="nfId" aria-label="Default select example" asp-items="ViewBag.NfOptions">
+            </select>
+        </div>
+
+        <div class="form-group col-3 my-2">
+            <label for="pagamentoRecebidoId"><b>Pagamento</b></label>
+            <select name=pagamento class="form-select" id="pagamentoRecebidoId" aria-label="Default select example"  asp-items="ViewBag.PagamentoOptions">
+            </select>
+        </div>
+
+        <div class="form-group col-3 my-2">
+            <label for="ativadoDesativado"><b>Ativado/Desativado</b></label>
+            <select name="ativadoDesativado" class="form-select" id="ativadoDesativado" aria-label="Default select example" asp-items="ViewBag.AtivadoDesativadoOptions">
+            </select>
+        </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary my-3 col-2">Pesquisar</button>
+    <button type="button" class="btn btn-outline-primary my-3 col-2" onclick="limparFiltros()">Limpar Filtros</button>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">PROJETO</th>
+            <th scope="col">TIPO</th>
+            <th scope="col">WWC</th>
+            <th scope="col">HORAS</th>
+            <th scope="col">VALOR (R$)</th>
+            <th scope="col">FEITO EM</th>
+            <th scope="col">PO</th>
+            <th scope="col">VALOR PO (R$)</th>
+            <th scope="col">STATUS</th>
+            <th scope="col">RECEBIDA EM</th>
+            <th scope="col">NOTA FISCAL</th>
+            <th scope="col">PAGAMENTO</th>
+            <th scope="col">AÇÕES</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Registros != null && Model.Registros.Any())
+            @foreach (var item in Model.Registros)
+            {
+                <tr class="@(item.DataExclusao == null ? "" : "bg-light")">
+                    <th scope="row">@item.Projeto</th>
+                    <td>@item.Tipo</td>
+                    <td>@item.WWC</td>
+                    <td>@item.HORAS</td>
+                    <td class="@(item.Valor == item.ValorPO ? "" : "text-danger")">@item.Valor</td>
+                    <td>@(item.FeitoEm == DateTime.MinValue ? "" : item?.FeitoEm?.ToShortDateString())</td>
+                    <td>@item.PO</td>
+                    <td class="@(item.Valor == item.ValorPO ? "" : "text-danger")">@item.ValorPO</td>
+                    <td>@(item.Status ? "Recebido" : "Pendente")</td>
+                    <td>@(item.RecebidaEm == DateTime.MinValue ? "" : item?.RecebidaEm?.ToShortDateString())</td>
+                    <td>@(item.EmitiuNotaFiscal ? "Emitida" : "Pendente")</td>
+                    <td>@(item.PagamentoRecebido ? "Pago" : "Pendente")</td>
+                    <td>
+                        <a asp-action="AdicionarEditar" asp-route-id="@item.Id"><i class='bx bx-edit-alt'></i></a>
+                        <a asp-action="DesativarAtivar" asp-route-id="@item.Id"><i class='bx bx-power-off'></i></a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="6"><b>Valor Total</b>: @Model?.ValorTotal</td>
+                <td colspan="6"><b>Valor PO Total</b>: @Model?.ValorPOTotal</td>
+            </tr>
+
+    </tbody>
+</table>
+
+<a asp-action="AdicionarEditar" class="btn btn-primary" role="button">Adicionar</a>
