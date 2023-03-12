@@ -9,8 +9,9 @@ namespace OrganizadorPOs.Configurations
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddTransient<IRegistroService, RegistroService>();
+
             services.AddTransient<IRegistroRepository, RegistroRepository>();
-            services.AddTransient<ITipoRepository, TipoRepository>();
+            services.AddScoped<ITipoRepository, TipoRepository>();
         }
     }
 }

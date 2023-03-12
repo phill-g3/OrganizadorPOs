@@ -11,5 +11,6 @@ namespace OrganizadorPOs.Domain.Interfaces
     {
         Task<IQueryable<Registro>> List(FiltroRegistros filtro);
         Task AtivarDesativar(int id);
+        Task AtivarDesativarMultiThread(int id);
     }
 }

@@ -17,8 +17,8 @@
             <label for="tipoId"><b>Tipo</b></label>
             <input name="tipo" class="form-control" id="tipoId" list="tipos" autocomplete="off">
             <datalist id="tipos">
-                @if(ViewBag.Tipos != null && ((IEnumerable<string>)ViewBag.Tipos).Any())
-                    foreach(string tipo in ViewBag.Tipos)
+                @if (ViewBag.Tipos != null && ((IEnumerable<string>)ViewBag.Tipos).Any())
+                    foreach (string tipo in ViewBag.Tipos)
                     {
                         <option value="@tipo"></option>
                     }
@@ -72,7 +72,7 @@
 
         <div class="form-group col-3 my-2">
             <label for="pagamentoRecebidoId"><b>Pagamento</b></label>
-            <select name=pagamento class="form-select" id="pagamentoRecebidoId" aria-label="Default select example"  asp-items="ViewBag.PagamentoOptions">
+            <select name=pagamento class="form-select" id="pagamentoRecebidoId" aria-label="Default select example" asp-items="ViewBag.PagamentoOptions">
             </select>
         </div>
 
@@ -92,36 +92,46 @@
 <table class="table">
     <thead>
         <tr>
+            <th scope="col" id="headerColunaSelecionar" class="invisible-checkbox colunaSelecionar">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="flexCheckDefault" onclick="marcarDesmarcarTudo(this)" value="0">
+                </div>
+            </th>
             <th scope="col">PROJETO</th>
             <th scope="col">TIPO</th>
             <th scope="col">WWC</th>
             <th scope="col">HORAS</th>
             <th scope="col">VALOR (R$)</th>
-            <th scope="col">FEITO EM</th>
-            <th scope="col">PO</th>
+            <th scope="col" onclick="organizarPorData(this)" id="organizadorFeitoEm" class="pointer">FEITO EM</th>
+            <th scope="col" onclick="organizarPorNumero(this)" id="organizadorPO" class="pointer">PO</th>
             <th scope="col">VALOR PO (R$)</th>
             <th scope="col">STATUS</th>
-            <th scope="col">RECEBIDA EM</th>
+            <th scope="col" onclick="organizarPorData(this)" id="organizadorRecebidaEm" class="pointer">RECEBIDA EM</th>
             <th scope="col">NOTA FISCAL</th>
             <th scope="col">PAGAMENTO</th>
             <th scope="col">AÇÕES</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tbdy">
         @if (Model != null && Model.Registros != null && Model.Registros.Any())
             @foreach (var item in Model.Registros)
             {
-                <tr class="@(item.DataExclusao == null ? "" : "bg-light")">
+                <tr class="tr-dinamica @(item.DataExclusao == null ? "" : "bg-light  text-secondary")">
+                    <td class="invisible-checkbox colunaSelecionar">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@item.Id" id="flexCheckDefault">
+                        </div>
+                    </td>
                     <th scope="row">@item.Projeto</th>
                     <td>@item.Tipo</td>
                     <td>@item.WWC</td>
                     <td>@item.HORAS</td>
                     <td class="@(item.Valor == item.ValorPO ? "" : "text-danger")">@item.Valor</td>
-                    <td>@(item.FeitoEm == DateTime.MinValue ? "" : item?.FeitoEm?.ToShortDateString())</td>
-                    <td>@item.PO</td>
+                    <td class="organizadorFeitoEm">@(item.FeitoEm == DateTime.MinValue ? "" : item?.FeitoEm?.ToShortDateString())</td>
+                    <td class="organizadorPO">@item.PO</td>
                     <td class="@(item.Valor == item.ValorPO ? "" : "text-danger")">@item.ValorPO</td>
                     <td>@(item.Status ? "Recebido" : "Pendente")</td>
-                    <td>@(item.RecebidaEm == DateTime.MinValue ? "" : item?.RecebidaEm?.ToShortDateString())</td>
+                    <td class="organizadorRecebidaEm">@(item.RecebidaEm == DateTime.MinValue ? "" : item?.RecebidaEm?.ToShortDateString())</td>
                     <td>@(item.EmitiuNotaFiscal ? "Emitida" : "Pendente")</td>
                     <td>@(item.PagamentoRecebido ? "Pago" : "Pendente")</td>
                     <td>
@@ -130,12 +140,22 @@
                     </td>
                 </tr>
             }
-            <tr>
-                <td colspan="6"><b>Valor Total</b>: @Model?.ValorTotal</td>
-                <td colspan="6"><b>Valor PO Total</b>: @Model?.ValorPOTotal</td>
-            </tr>
+
 
     </tbody>
+
+</table>
+<table class="table">
+    <tr>
+        <td colspan="6"><b>Valor Total</b>: @Model?.ValorTotal</td>
+        <td colspan="6"><b>Valor PO Total</b>: @Model?.ValorPOTotal</td>
+    </tr>
 </table>
 
+<button type="button" class="btn btn-outline-primary" onclick="ativarSelecao()">Selecionar</button>
 <a asp-action="AdicionarEditar" class="btn btn-primary" role="button">Adicionar</a>
+<button type="button" class="btn btn-outline-primary invisible-checkbox colunaSelecionar" onclick="excluirEmMassa()"><i class='bx bx-power-off'></i></button>
+
+@section Scripts{
+<script src="@Url.Content("~/js/crud.js")"></script>
+}

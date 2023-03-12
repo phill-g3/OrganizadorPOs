@@ -6,6 +6,7 @@ namespace OrganizadorPOs.Domain.Interfaces
     {
         Task<IQueryable<Registro>> List(FiltroRegistros filtro);
         Task AtivarDesativar(int id);
+        Task AtivarDesativarEmMassa(List<int> id);
         Task AdicionarAtualizar(Registro registro);
         Task<List<Tipo>> ListarTipos();
     }

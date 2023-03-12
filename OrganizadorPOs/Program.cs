@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.RegisterDependencies();
 
 string? connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped, ServiceLifetime.Singleton);
+builder.Services.AddDbContextFactory<MyContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.ConfigAutoMapper();
 

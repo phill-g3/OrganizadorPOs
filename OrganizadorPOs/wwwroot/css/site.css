@@ -26,3 +26,11 @@ div.main {
 table tbody td a, table tbody td a:visited, table tbody td a:hover, table tbody td a:active {
     color: inherit;
 }
+
+.pointer {
+    cursor: pointer;
+}
+
+.invisible-checkbox {
+    display: none;
+}

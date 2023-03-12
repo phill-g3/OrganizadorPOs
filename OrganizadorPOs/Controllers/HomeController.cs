@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using OrganizadorPOs.Domain.Entities;
 using OrganizadorPOs.Domain.Interfaces;
 using OrganizadorPOs.Models;
@@ -124,6 +125,27 @@ namespace OrganizadorPOs.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<JsonResult> DesativarAtivarEmMassa(Dictionary<string, List<int>> input)
+        {
+            try
+            {
+                var ids = input["value"];
+
+                if (ids != null && ids.Any())
+                {
+                    await _registroService.AtivarDesativarEmMassa(ids);
+                    return Json(JsonConvert.SerializeObject(new { status = 1 }));
+                }
+
+                return Json(JsonConvert.SerializeObject(new { status = 0 }));
+            }
+            catch (Exception ex)
+            {
+                return Json(JsonConvert.SerializeObject(new { status = 0 }));
+            }
+        }
+
         private async Task MontarMenus(FiltroRegistros filtro)
         {
             if (filtro != null && filtro != null)
@@ -166,10 +188,10 @@ namespace OrganizadorPOs.Controllers
                 {
                     Text = x.Key,
                     Value = x.Value,
-                    Selected = filtro.Pagamento == bool.Parse(x.Value)
+                    Selected = filtro.AtivadoDesativado == bool.Parse(x.Value)
                 });
 
-                
+
             }
 
             await Task.FromResult(Task.CompletedTask);

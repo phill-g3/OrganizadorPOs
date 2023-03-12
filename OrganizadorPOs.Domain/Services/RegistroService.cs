@@ -72,5 +72,11 @@ namespace OrganizadorPOs.Domain.Services
 
             await Task.FromResult(Task.CompletedTask);
         }
+
+        public async Task AtivarDesativarEmMassa(List<int> id)
+        {
+            IEnumerable<Task> tasks = id.Select(x => _registroRepository.AtivarDesativarMultiThread(x));
+            await Task.WhenAll(tasks);
+        }
     }
 }

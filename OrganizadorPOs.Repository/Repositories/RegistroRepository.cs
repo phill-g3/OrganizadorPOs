@@ -1,4 +1,5 @@
-﻿using OrganizadorPOs.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using OrganizadorPOs.Domain.Entities;
 using OrganizadorPOs.Domain.Interfaces;
 using OrganizadorPOs.Repository.Context;
 
@@ -6,9 +7,11 @@ namespace OrganizadorPOs.Repository.Repositories
 {
     public class RegistroRepository : BaseRepository<Registro>, IRegistroRepository
     {
-        public RegistroRepository(MyContext context) : base(context)
-        {
+        private readonly IDbContextFactory<MyContext> _dbContextFactory;
 
+        public RegistroRepository(MyContext context, IDbContextFactory<MyContext> dbContextFactory) : base(context)
+        {
+            _dbContextFactory = dbContextFactory;
         }
 
         public async Task AtivarDesativar(int id)
@@ -23,6 +26,35 @@ namespace OrganizadorPOs.Repository.Repositories
                     registro.DataExclusao = null;
 
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AtivarDesativarMultiThread(int id)
+        {
+            try
+            {
+                using (MyContext context = _dbContextFactory.CreateDbContext())
+                {
+                    Registro? registro = new();
+
+                    if (context.Registros != null)
+                    {
+                        registro = await context.Registros.FirstOrDefaultAsync(x => x.Id == id);
+
+                        if (registro != null)
+                        {
+                            if (registro.DataExclusao == null)
+                                registro.DataExclusao = DateTime.Now;
+                            else
+                                registro.DataExclusao = null;
+
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
