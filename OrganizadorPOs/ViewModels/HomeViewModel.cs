@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace OrganizadorPOs.ViewModels
+﻿namespace OrganizadorPOs.ViewModels
 {
     public class HomeViewModel
     {

@@ -96,10 +96,12 @@ const ativarSelecao = () => {
 
     if (checkboxesNaoVisiveis) {
         $('.colunaSelecionar').removeClass('invisible-checkbox');
+        $('#botao-excel').addClass('invisible-checkbox');
     }
     else {
         $('input:checkbox').prop('checked', false);
         $('.colunaSelecionar').addClass('invisible-checkbox');
+        $('#botao-excel').removeClass('invisible-checkbox');
     }
 
 }
@@ -136,4 +138,14 @@ const excluirEmMassa = () => {
 
 const marcarDesmarcarTudo = (e) => {
     $('input:checkbox').not(e).prop('checked', e.checked);
+}
+
+const submitPersonalizado = () => {
+    $('#gerar-excel').val(undefined);
+    $('form').submit();
+}
+
+const baixarExcel = () => {
+    $('#gerar-excel').val(true);
+    $('form').submit();
 }

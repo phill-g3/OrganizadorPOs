@@ -25,7 +25,7 @@ namespace OrganizadorPOs.Controllers
             (
                 bool? status, bool? pagamento, bool? nf, bool? ativadoDesativado,
                 DateTime? feitoEmMin, DateTime? feitoEmMax, DateTime? recebidaEmMin,
-                DateTime? recebidaEmMax, string? projeto, string? tipo
+                DateTime? recebidaEmMax, string? projeto, string? tipo, bool? gerarExcel
 
             )
         {
@@ -49,8 +49,18 @@ namespace OrganizadorPOs.Controllers
 
                 Task task = MontarMenus(filtro);
 
-                IQueryable<Registro> registros = await _registroService.List(filtro);
+                List<Registro> registros = await _registroService.List(filtro);
                 List<Tipo> tipos = await _registroService.ListarTipos();
+
+                if (gerarExcel != null && (bool)gerarExcel)
+                {
+                    byte[] output = await _registroService.GerarExcel(registros);
+                    return File(
+                        output,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "Controle.xlsx"
+                        );
+                }
 
                 model.Registros = _mapper.Map<List<RegistroViewModel>>(registros);
                 model.Filtro = _mapper.Map<FiltroRegistrosViewModel>(filtro);
@@ -190,8 +200,6 @@ namespace OrganizadorPOs.Controllers
                     Value = x.Value,
                     Selected = filtro.AtivadoDesativado == bool.Parse(x.Value)
                 });
-
-
             }
 
             await Task.FromResult(Task.CompletedTask);

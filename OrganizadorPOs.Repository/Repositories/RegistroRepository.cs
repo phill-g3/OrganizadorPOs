@@ -58,7 +58,7 @@ namespace OrganizadorPOs.Repository.Repositories
             }
         }
 
-        public async Task<IQueryable<Registro>> List(FiltroRegistros filtro)
+        public async Task<List<Registro>> List(FiltroRegistros filtro)
         {
             IQueryable<Registro> query = await ObterQueryable();
 
@@ -104,7 +104,7 @@ namespace OrganizadorPOs.Repository.Repositories
                 query = query.Where(x => x.RecebidaEm != null && x.RecebidaEm <= filtro.RecebidaEmMax);
 
 
-            return query;
+            return await query.ToListAsync();
         }
     }
 }

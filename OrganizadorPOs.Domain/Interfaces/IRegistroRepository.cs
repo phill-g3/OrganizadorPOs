@@ -9,7 +9,7 @@ namespace OrganizadorPOs.Domain.Interfaces
 {
     public interface IRegistroRepository : IBaseRepository<Registro>
     {
-        Task<IQueryable<Registro>> List(FiltroRegistros filtro);
+        Task<List<Registro>> List(FiltroRegistros filtro);
         Task AtivarDesativar(int id);
         Task AtivarDesativarMultiThread(int id);
     }

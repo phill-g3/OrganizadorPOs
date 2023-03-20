@@ -84,8 +84,10 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary my-3 col-2">Pesquisar</button>
+    <button type="button" class="btn btn-primary my-3 col-2" onclick="submitPersonalizado()">Pesquisar</button>
     <button type="button" class="btn btn-outline-primary my-3 col-2" onclick="limparFiltros()">Limpar Filtros</button>
+
+    <input type="hidden" id="gerar-excel" name="gerarExcel" />
 </form>
 
 
@@ -155,6 +157,7 @@
 <button type="button" class="btn btn-outline-primary" onclick="ativarSelecao()">Selecionar</button>
 <a asp-action="AdicionarEditar" class="btn btn-primary" role="button">Adicionar</a>
 <button type="button" class="btn btn-outline-primary invisible-checkbox colunaSelecionar" onclick="excluirEmMassa()"><i class='bx bx-power-off'></i></button>
+<button type="button" id="botao-excel"class="btn btn-outline-primary" onclick="baixarExcel()"><i class='bx bx-spreadsheet' ></i></i></button>
 
 @section Scripts{
 <script src="@Url.Content("~/js/crud.js")"></script>

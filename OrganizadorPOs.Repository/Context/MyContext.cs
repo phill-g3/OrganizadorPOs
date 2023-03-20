@@ -15,7 +15,10 @@ namespace OrganizadorPOs.Repository.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
     }
 }
